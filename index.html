@@ -3,409 +3,113 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>통상임금 계산기 (최근 판례 반영)</title>
+  <title>근로 계산기 메인</title>
   <style>
     :root {
-      --bg: #f4f7fb;
+      --bg1: #f7fbff;
+      --bg2: #eaf3ff;
       --panel: #ffffff;
+      --line: #d7e1ef;
       --text: #1f2937;
-      --sub: #6b7280;
-      --line: #d1d5db;
-      --accent: #0a5adf;
-      --accent-soft: #e9f0ff;
-      --ok: #0f766e;
-      --warn: #a16207;
+      --sub: #5f6b7a;
+      --primary: #0a56d6;
+      --primary2: #2a89ff;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
-      background: linear-gradient(145deg, #f7f9ff 0%, #edf5ff 100%);
-      color: var(--text);
       min-height: 100vh;
-      padding: 24px;
       display: grid;
       place-items: center;
+      padding: 20px;
+      font-family: "Noto Sans KR", "Malgun Gothic", sans-serif;
+      color: var(--text);
+      background: linear-gradient(140deg, var(--bg1), var(--bg2));
     }
 
     .card {
-      width: min(1060px, 100%);
+      width: min(760px, 100%);
       background: var(--panel);
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      box-shadow: 0 10px 28px rgba(2, 6, 23, 0.08);
+      border: 1px solid #e6edf7;
+      border-radius: 18px;
+      box-shadow: 0 14px 30px rgba(2, 6, 23, 0.09);
       overflow: hidden;
     }
 
-    .header {
+    .head {
       padding: 24px;
       color: white;
-      background: linear-gradient(120deg, #0a5adf 0%, #2b86ff 100%);
+      background: linear-gradient(120deg, var(--primary), var(--primary2));
     }
 
-    .header h1 {
+    .head h1 {
       margin: 0 0 8px;
-      font-size: 1.45rem;
+      font-size: 1.5rem;
     }
 
-    .header p {
+    .head p {
       margin: 0;
-      font-size: 0.93rem;
-      line-height: 1.5;
       opacity: 0.95;
+      line-height: 1.5;
+      font-size: 0.95rem;
     }
 
     .content {
       padding: 22px;
       display: grid;
-      gap: 22px;
+      gap: 14px;
     }
 
-    .section {
-      border: 1px solid #ebedf0;
+    .nav-btn {
+      display: block;
+      width: 100%;
+      text-decoration: none;
+      border: 1px solid var(--line);
       border-radius: 12px;
       padding: 16px;
+      color: var(--text);
       background: #fff;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
 
-    .section h2 {
-      margin: 0 0 10px;
+    .nav-btn:hover {
+      transform: translateY(-1px);
+      border-color: #b4ccf3;
+      box-shadow: 0 8px 18px rgba(10, 86, 214, 0.12);
+    }
+
+    .nav-btn strong {
+      display: block;
+      margin-bottom: 4px;
       font-size: 1.03rem;
+      color: #0a3f99;
     }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-    }
-
-    .field {
-      display: grid;
-      gap: 6px;
-    }
-
-    label {
-      font-weight: 600;
+    .nav-btn span {
+      color: var(--sub);
       font-size: 0.9rem;
-    }
-
-    input, select {
-      width: 100%;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 0.93rem;
-      background: white;
-      outline: none;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(10, 90, 223, 0.14);
-    }
-
-    .hint {
-      margin: 8px 0 0;
-      color: var(--sub);
-      font-size: 0.83rem;
-      line-height: 1.45;
-    }
-
-    .chip {
-      display: inline-block;
-      border-radius: 999px;
-      padding: 5px 10px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      margin-right: 8px;
-      margin-bottom: 6px;
-    }
-
-    .chip.ok {
-      background: #dcfce7;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-    }
-
-    .chip.warn {
-      background: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fde68a;
-    }
-
-    .result {
-      background: var(--accent-soft);
-      border: 1px solid #cbdbff;
-      border-radius: 12px;
-      padding: 14px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      align-items: baseline;
-      padding-bottom: 7px;
-      border-bottom: 1px dashed #bfd3ff;
-    }
-
-    .row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .row strong {
-      color: #0b419f;
-      font-size: 1.07rem;
-    }
-
-    .small {
-      color: var(--sub);
-      font-size: 0.81rem;
-      line-height: 1.45;
-    }
-
-    .links {
-      font-size: 0.8rem;
-      line-height: 1.5;
-      color: var(--sub);
-    }
-
-    .links a {
-      color: #174ea6;
+      line-height: 1.4;
     }
   </style>
 </head>
 <body>
   <main class="card">
-    <section class="header">
-      <h1>통상임금 계산기 (최근 판례 반영)</h1>
-      <p>2024년 12월 19일 대법원 전원합의체(2020다247190, 2023다302838) 법리 변경과 2025년 고용노동부 개정 지침 취지를 반영해 계산합니다.</p>
+    <section class="head">
+      <h1>근로 계산기 메인</h1>
+      <p>아래 버튼으로 원하는 계산기로 이동하세요.</p>
     </section>
-
     <section class="content">
-      <section class="section">
-        <h2>1) 법리 적용 기준</h2>
-        <div class="grid">
-          <div class="field">
-            <label for="baseDate">수당 산정 기준일</label>
-            <input id="baseDate" type="date" value="2026-04-09" />
-          </div>
-          <div class="field">
-            <label for="parallelCase">2024-12-19 당시 소송 계류/병행사건 여부</label>
-            <select id="parallelCase">
-              <option value="no">아니오</option>
-              <option value="yes">예</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="monthlyHours">월 소정근로시간 (시간)</label>
-            <input id="monthlyHours" type="number" min="1" step="1" value="209" />
-          </div>
-          <div class="field">
-            <label for="workdayHours">1일 소정근로시간 (시간)</label>
-            <input id="workdayHours" type="number" min="1" step="0.5" value="8" />
-          </div>
-        </div>
-        <p class="hint">기준일이 2024-12-19 이후이거나, 당시 계류/병행사건이면 신(新)법리를 적용해 재직·근무일수 조건부 정기지급 임금을 통상임금에 포함합니다.</p>
-        <div id="ruleBadgeWrap"></div>
-      </section>
-
-      <section class="section">
-        <h2>2) 임금 항목 입력 (월 환산 기준)</h2>
-        <div class="grid">
-          <div class="field">
-            <label for="basePay">기본급 (월, 원)</label>
-            <input id="basePay" type="number" min="0" step="1000" value="2500000" />
-          </div>
-          <div class="field">
-            <label for="fixedAllowance">고정수당 합계 (월, 원)</label>
-            <input id="fixedAllowance" type="number" min="0" step="1000" value="300000" />
-          </div>
-          <div class="field">
-            <label for="regularBonus">정기상여금 (1회 지급액, 원)</label>
-            <input id="regularBonus" type="number" min="0" step="1000" value="0" />
-          </div>
-          <div class="field">
-            <label for="bonusCycle">정기상여 지급주기</label>
-            <select id="bonusCycle">
-              <option value="1">매월 (1개월)</option>
-              <option value="3">분기 (3개월)</option>
-              <option value="6">반기 (6개월)</option>
-              <option value="12">연 1회 (12개월)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="incumbentConditional">재직조건부 정기지급 임금 (월, 원)</label>
-            <input id="incumbentConditional" type="number" min="0" step="1000" value="0" />
-          </div>
-          <div class="field">
-            <label for="daysConditional">근무일수조건부 정기지급 임금 (월, 원)</label>
-            <input id="daysConditional" type="number" min="0" step="1000" value="0" />
-          </div>
-          <div class="field">
-            <label for="performanceMin">성과급 최소보장분 (월, 원)</label>
-            <input id="performanceMin" type="number" min="0" step="1000" value="0" />
-          </div>
-          <div class="field">
-            <label for="performanceVariable">근무실적 연동 변동성과급 (월, 원)</label>
-            <input id="performanceVariable" type="number" min="0" step="1000" value="0" />
-          </div>
-        </div>
-        <p class="hint">근무실적에 따라 달라지는 변동성과급은 통상임금에서 제외하고, 실적과 무관한 최소보장분만 포함해 계산합니다.</p>
-      </section>
-
-      <section class="section">
-        <h2>3) 연장·야간·휴일근로 수당</h2>
-        <div class="grid">
-          <div class="field">
-            <label for="overtimeHours">연장근로 (시간)</label>
-            <input id="overtimeHours" type="number" min="0" step="0.5" value="0" />
-          </div>
-          <div class="field">
-            <label for="nightHours">야간근로 (시간)</label>
-            <input id="nightHours" type="number" min="0" step="0.5" value="0" />
-          </div>
-          <div class="field">
-            <label for="holidayHours">휴일근로 (시간)</label>
-            <input id="holidayHours" type="number" min="0" step="0.5" value="0" />
-          </div>
-          <div class="field">
-            <label for="holidayType">휴일근로 가산 방식</label>
-            <select id="holidayType">
-              <option value="all1_5">전체 1.5배</option>
-              <option value="8split">8시간 이내 1.5배, 초과 2배</option>
-            </select>
-          </div>
-        </div>
-      </section>
-
-      <section class="result" aria-live="polite">
-        <div class="row"><span>통상임금 산입 월 임금</span><strong id="ordinaryMonthly">0원</strong></div>
-        <div class="row"><span>통상시급</span><strong id="ordinaryHourly">0원</strong></div>
-        <div class="row"><span>통상일급</span><strong id="ordinaryDaily">0원</strong></div>
-        <div class="row"><span>연장근로수당</span><strong id="payOvertime">0원</strong></div>
-        <div class="row"><span>야간근로수당</span><strong id="payNight">0원</strong></div>
-        <div class="row"><span>휴일근로수당</span><strong id="payHoliday">0원</strong></div>
-        <div class="row"><span>가산수당 합계</span><strong id="payTotal">0원</strong></div>
-      </section>
-
-      <section class="section">
-        <h2>4) 산입/제외 내역</h2>
-        <div class="small" id="detail"></div>
-      </section>
-
-      <p class="small">참고: 이 계산기는 법리 이해와 내부 시뮬레이션용입니다. 실제 임금채권/소송 적용 여부는 단체협약, 취업규칙, 임금명세 구조, 소멸시효, 신의칙, 판례 사실관계에 따라 달라질 수 있습니다.</p>
-      <div class="links">
-        출처: 
-        <a href="https://www.scourt.go.kr/portal/news/NewsViewAction.work?gubun=6&seqnum=2743" target="_blank" rel="noopener noreferrer">대법원 보도자료(2020다247190, 2023다302838)</a> |
-        <a href="https://www.scourt.go.kr/portal/news/NewsViewAction.work?gubun=4&seqnum=10200" target="_blank" rel="noopener noreferrer">판례속보(2020다247190)</a>
-      </div>
+      <a class="nav-btn" href="ordinary-wage-calculator.html">
+        <strong>통상임금 계산기</strong>
+        <span>최근 판례 반영 통상임금/가산수당 계산</span>
+      </a>
+      <a class="nav-btn" href="employee-count-calculator.html">
+        <strong>상시근로자수 계산기</strong>
+        <span>5인/10인 기준 상시근로자수 판단</span>
+      </a>
     </section>
   </main>
-
-  <script>
-    const BOUNDARY_DATE = "2024-12-19";
-
-    const fields = [
-      "baseDate", "parallelCase", "monthlyHours", "workdayHours",
-      "basePay", "fixedAllowance", "regularBonus", "bonusCycle",
-      "incumbentConditional", "daysConditional", "performanceMin", "performanceVariable",
-      "overtimeHours", "nightHours", "holidayHours", "holidayType"
-    ];
-
-    fields.forEach((id) => {
-      const el = document.getElementById(id);
-      el.addEventListener("input", calculate);
-      el.addEventListener("change", calculate);
-    });
-
-    function num(id) {
-      const v = Number(document.getElementById(id).value);
-      return Number.isFinite(v) && v >= 0 ? v : 0;
-    }
-
-    function won(v) {
-      return `${Math.round(v).toLocaleString("ko-KR")}원`;
-    }
-
-    function useNewRule(baseDate, parallelCase) {
-      return baseDate >= BOUNDARY_DATE || parallelCase === "yes";
-    }
-
-    function holidayPay(hours, hourly, mode) {
-      if (hours <= 0) return 0;
-      if (mode === "all1_5") return hours * hourly * 1.5;
-      const within8 = Math.min(8, hours);
-      const over8 = Math.max(0, hours - 8);
-      return within8 * hourly * 1.5 + over8 * hourly * 2;
-    }
-
-    function calculate() {
-      const baseDate = document.getElementById("baseDate").value || BOUNDARY_DATE;
-      const parallelCase = document.getElementById("parallelCase").value;
-      const isNewRule = useNewRule(baseDate, parallelCase);
-
-      const monthlyHours = Math.max(1, num("monthlyHours"));
-      const workdayHours = Math.max(1, num("workdayHours"));
-
-      const basePay = num("basePay");
-      const fixedAllowance = num("fixedAllowance");
-      const regularBonus = num("regularBonus");
-      const bonusCycle = Math.max(1, num("bonusCycle"));
-      const bonusMonthly = regularBonus / bonusCycle;
-
-      const incumbentConditional = num("incumbentConditional");
-      const daysConditional = num("daysConditional");
-      const performanceMin = num("performanceMin");
-      const performanceVariable = num("performanceVariable");
-
-      const overtimeHours = num("overtimeHours");
-      const nightHours = num("nightHours");
-      const holidayHours = num("holidayHours");
-      const holidayType = document.getElementById("holidayType").value;
-
-      const conditionalIncluded = isNewRule ? (incumbentConditional + daysConditional) : 0;
-      const conditionalExcluded = isNewRule ? 0 : (incumbentConditional + daysConditional);
-
-      const ordinaryMonthly = basePay + fixedAllowance + bonusMonthly + performanceMin + conditionalIncluded;
-      const ordinaryHourly = ordinaryMonthly / monthlyHours;
-      const ordinaryDaily = ordinaryHourly * workdayHours;
-
-      const payOvertime = overtimeHours * ordinaryHourly * 1.5;
-      const payNight = nightHours * ordinaryHourly * 1.5;
-      const payHoliday = holidayPay(holidayHours, ordinaryHourly, holidayType);
-      const payTotal = payOvertime + payNight + payHoliday;
-
-      document.getElementById("ordinaryMonthly").textContent = won(ordinaryMonthly);
-      document.getElementById("ordinaryHourly").textContent = won(ordinaryHourly);
-      document.getElementById("ordinaryDaily").textContent = won(ordinaryDaily);
-      document.getElementById("payOvertime").textContent = won(payOvertime);
-      document.getElementById("payNight").textContent = won(payNight);
-      document.getElementById("payHoliday").textContent = won(payHoliday);
-      document.getElementById("payTotal").textContent = won(payTotal);
-
-      const badgeWrap = document.getElementById("ruleBadgeWrap");
-      badgeWrap.innerHTML = isNewRule
-        ? `<span class="chip ok">신법리 적용 (2024-12-19 판례 반영)</span><span class="chip ok">재직·근무일수 조건부 정기지급 임금 포함</span>`
-        : `<span class="chip warn">종전 법리 모드</span><span class="chip warn">재직·근무일수 조건부 정기지급 임금 제외</span>`;
-
-      document.getElementById("detail").innerHTML = [
-        `기본급 산입: ${won(basePay)}`,
-        `고정수당 산입: ${won(fixedAllowance)}`,
-        `정기상여 월환산 산입: ${won(bonusMonthly)} (1회 ${won(regularBonus)}, ${bonusCycle}개월 주기)`,
-        `성과급 최소보장분 산입: ${won(performanceMin)}`,
-        `재직·근무일수 조건부 정기지급 임금 산입: ${won(conditionalIncluded)}`,
-        `재직·근무일수 조건부 정기지급 임금 제외: ${won(conditionalExcluded)}`,
-        `변동성과급(근무실적 연동) 제외: ${won(performanceVariable)}`
-      ].join("<br>");
-    }
-
-    calculate();
-  </script>
 </body>
 </html>

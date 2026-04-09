@@ -195,9 +195,29 @@
       color: var(--sub);
       line-height: 1.5;
     }
+
+    .back-wrap {
+      width: min(1100px, 100%);
+      margin: 0 auto 10px;
+    }
+
+    .back-btn {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0a4fc4;
+      background: #eef4ff;
+      border: 1px solid #cfe0ff;
+      border-radius: 999px;
+      padding: 7px 12px;
+    }
   </style>
 </head>
 <body>
+  <div class="back-wrap">
+    <a class="back-btn" href="index.html">메인으로 돌아가기</a>
+  </div>
   <main class="wrap">
     <section class="head">
       <h1>상시근로자수 계산기 (5인/10인 기준)</h1>

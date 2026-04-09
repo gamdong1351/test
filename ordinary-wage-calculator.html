@@ -163,6 +163,13 @@
       font-size: 1.07rem;
     }
 
+    .formula {
+      margin-top: 8px;
+      font-size: 0.84rem;
+      color: #3f4d63;
+      line-height: 1.45;
+    }
+
     .small {
       color: var(--sub);
       font-size: 0.81rem;
@@ -312,6 +319,7 @@
         <div class="row"><span>휴일근로수당</span><strong id="payHoliday">0원</strong></div>
         <div class="row"><span>가산수당 합계</span><strong id="payTotal">0원</strong></div>
         <div class="row"><span>통상시급</span><strong id="ordinaryHourly">0원</strong></div>
+        <div class="formula" id="hourlyFormula">통상시급 산정식: 0원 ÷ 1시간 = 0원</div>
       </section>
 
       <section class="section">
@@ -408,6 +416,8 @@
       document.getElementById("payNight").textContent = won(payNight);
       document.getElementById("payHoliday").textContent = won(payHoliday);
       document.getElementById("payTotal").textContent = won(payTotal);
+      document.getElementById("hourlyFormula").textContent =
+        `통상시급 산정식: ${won(ordinaryMonthly)} ÷ ${monthlyHours.toLocaleString("ko-KR")}시간 = ${won(ordinaryHourly)}`;
 
       const badgeWrap = document.getElementById("ruleBadgeWrap");
       badgeWrap.innerHTML = isNewRule
